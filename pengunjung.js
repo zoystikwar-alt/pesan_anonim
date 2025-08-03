@@ -5,6 +5,7 @@ const pesanInput = document.getElementById("pesan");
 const kirimBtn = document.getElementById("kirimBtn");
 const balasanContainer = document.getElementById("balasanContainer");
 
+// Fungsi kirim pesan
 kirimBtn.onclick = () => {
   const nama = namaInput.value.trim();
   const pesan = pesanInput.value.trim();
@@ -14,24 +15,26 @@ kirimBtn.onclick = () => {
       nama,
       pesan,
       balasan: ""
+    }).then(() => {
+      // Simpan ID pesan ke localStorage
+      let myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
+      myMessages.push(newRef.key);
+      localStorage.setItem("myMessages", JSON.stringify(myMessages));
+      alert("Pesan dikirim!");
+      namaInput.value = "";
+      pesanInput.value = "";
     });
-    // Simpan ID pesan ke localStorage
-    let myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
-    myMessages.push(newRef.key);
-    localStorage.setItem("myMessages", JSON.stringify(myMessages));
-    namaInput.value = "";
-    pesanInput.value = "";
-    alert("Pesan dikirim!");
   }
 };
 
+// Fungsi menampilkan pesan milik sendiri
 onValue(ref(db, "pesan"), snapshot => {
   balasanContainer.innerHTML = "";
   const data = snapshot.val();
   const myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
 
-  if (data) {
-    myMessages.reverse().forEach(key => {
+  if (data && myMessages.length > 0) {
+    myMessages.slice().reverse().forEach(key => {
       const item = data[key];
       if (item) {
         const div = document.createElement("div");
@@ -40,5 +43,7 @@ onValue(ref(db, "pesan"), snapshot => {
         balasanContainer.appendChild(div);
       }
     });
+  } else {
+    balasanContainer.innerHTML = "<p>Belum ada pesan yang kamu kirim.</p>";
   }
 });
