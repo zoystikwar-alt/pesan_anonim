@@ -1,4 +1,4 @@
-import { db, ref, push, onValue } from "./firebase.js";
+import { db, ref, push, set, onValue } from "./firebase.js";
 
 const namaInput = document.getElementById("nama");
 const pesanInput = document.getElementById("pesan");
@@ -17,7 +17,7 @@ kirimBtn.onclick = async () => {
 
   // Tambahkan pesan baru ke Firebase
   const newRef = push(ref(db, "pesan"));
-  await newRef.set({
+  await set(newRef, {
     nama: nama,
     pesan: pesan,
     balasan: ""
