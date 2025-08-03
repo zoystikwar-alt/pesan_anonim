@@ -16,12 +16,12 @@ kirimBtn.onclick = async () => {
   }
 
   // Tambahkan pesan baru ke Firebase
-  const newRef = push(ref(db, "pesan"));
-  await set(newRef, {
-    nama: nama,
-    pesan: pesan,
-    balasan: ""
-  });
+const newRef = await push(ref(db, "pesan"), {
+  nama: nama,
+  pesan: pesan,
+  balasan: ""
+});
+
 
   // Simpan kunci pesan ke localStorage
   let myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
@@ -57,3 +57,4 @@ onValue(ref(db, "pesan"), snapshot => {
     balasanContainer.innerHTML = "<p>Belum ada pesan milikmu.</p>";
   }
 });
+
