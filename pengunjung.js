@@ -5,6 +5,7 @@ const pesanInput = document.getElementById("pesan");
 const kirimBtn = document.getElementById("kirimBtn");
 const balasanContainer = document.getElementById("balasanContainer");
 
+// Tombol kirim
 kirimBtn.onclick = async () => {
   const nama = namaInput.value.trim();
   const pesan = pesanInput.value.trim();
@@ -14,36 +15,32 @@ kirimBtn.onclick = async () => {
     return;
   }
 
-  try {
-    const newRef = push(ref(db, "pesan")); // Buat referensi ID unik
-    await newRef.set({
-      nama,
-      pesan,
-      balasan: ""
-    });
+  // Tambahkan pesan baru ke Firebase
+  const newRef = push(ref(db, "pesan"));
+  await newRef.set({
+    nama: nama,
+    pesan: pesan,
+    balasan: ""
+  });
 
-    // Simpan ID pesan di localStorage
-    let myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
-    myMessages.push(newRef.key);
-    localStorage.setItem("myMessages", JSON.stringify(myMessages));
+  // Simpan kunci pesan ke localStorage
+  let myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
+  myMessages.push(newRef.key);
+  localStorage.setItem("myMessages", JSON.stringify(myMessages));
 
-    alert("Pesan berhasil dikirim!");
-    namaInput.value = "";
-    pesanInput.value = "";
-    console.log("Pesan terkirim dengan ID:", newRef.key);
-  } catch (error) {
-    console.error("Gagal mengirim pesan:", error);
-    alert("Terjadi kesalahan saat mengirim pesan.");
-  }
+  // Kosongkan input
+  pesanInput.value = "";
+  alert("Pesan berhasil dikirim!");
 };
 
-// Tampilkan hanya pesan milik sendiri
+// Menampilkan hanya pesan milik sendiri
 onValue(ref(db, "pesan"), snapshot => {
   balasanContainer.innerHTML = "";
   const data = snapshot.val();
   const myMessages = JSON.parse(localStorage.getItem("myMessages") || "[]");
 
   if (data && myMessages.length > 0) {
+    // Terbalikkan urutan biar terbaru di atas
     myMessages.slice().reverse().forEach(key => {
       const item = data[key];
       if (item) {
@@ -51,7 +48,7 @@ onValue(ref(db, "pesan"), snapshot => {
         div.className = "card";
         div.innerHTML = `
           <strong>${item.nama}:</strong><br>${item.pesan}
-          <small>Balasan: ${item.balasan || "(belum dibalas)"}</small>
+          <br><small>Balasan: ${item.balasan || "(belum dibalas)"}</small>
         `;
         balasanContainer.appendChild(div);
       }
