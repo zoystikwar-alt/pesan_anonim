@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pesan Anonim</title>
+  <script type="module" src="pengunjung.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      color: #fff;
+      padding: 30px;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background-color: #fff;
+      color: #4a00e0;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .card {
+      background: #fff;
+      color: #000;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .card small {
+      display: block;
+      margin-top: 10px;
+      font-style: italic;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kirim Pesan Anonim</h1>
+  <input type="text" id="nama" placeholder="Dari siapa?" />
+  <textarea id="pesan" placeholder="Tulis pesanmu di sini..."></textarea>
+  <button id="kirimBtn">Kirim Pesan</button>
+
+  <h2>Balasan Admin</h2>
+  <div id="balasanContainer"></div>
+</body>
+</html>
